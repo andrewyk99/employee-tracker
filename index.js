@@ -164,13 +164,11 @@ function showEmployeeByDepartment() {
                     choices: departmentList
                 }
             ]).then(data => {
-                let { department_id } = data;
-                data.department_id = departmentList.indexOf(department_id) + 1;
                 const sql = `SELECT employees.id, employees.first_name, employees.last_name, roles.title, employees.manager_id, departments.name
                             FROM employees
-                            CROSS JOIN roles ON employees.role_id = roles.id
-                            LEFT JOIN departments ON roles.department_id = department_id
-                            WHERE departments.id = ?`;
+                            LEFT JOIN roles ON employees.role_id = roles.id
+                            LEFT JOIN departments ON roles.department_id = departments.id
+                            WHERE departments.name = ?`;
                 const params = [data.department_id];
                 db.then(conn => conn.query(sql, params))
                     .then(([rows, fields]) => {
@@ -511,12 +509,11 @@ function deleteDepartment() {
                     choices: departmentList
                 }
             ]).then(data => {
-                let { department_id } = departmentList.indexOf(department_id) + 1;
-                const sql = `DELETE FROM departments WHERE id = ?`;
+                const sql = `DELETE FROM departments WHERE name = ?`;
                 const params = [data.department_id];
                 db.then(conn => conn.query(sql, params))
                     .then(() => {
-                        console.log(`Successfully deleted ${department_id}!`);
+                        console.log(`Successfully deleted ${data.department_id}!`);
                         closeApp();
                     });
             });
@@ -536,13 +533,11 @@ function deleteRole() {
                     choices: roleList
                 }
             ]).then(data => {
-                let { role_id } = data;
-                data.role_id = roleList.indexOf(role_id) + 1;
-                const sql = `DELETE FROM roles WHERE id = ?`;
+                const sql = `DELETE FROM roles WHERE title = ?`;
                 const params = [data.role_id];
                 db.then(conn => conn.query(sql, params))
                     .then(() => {
-                        console.log(`Successfully deleted ${role_id}!`);
+                        console.log(`Successfully deleted ${data.role_id}!`);
                         closeApp();
                     });
             });
@@ -563,9 +558,9 @@ function deleteEmployee() {
                     choices: employeeList
                 }
             ]).then(data => {
-                let { employee_id } = data;
+                let { employee_id } = data.split(" ");
                 const sql = `SELECT id FROM employees WHERE first_name = ? AND last_name = ?`;
-                const params = employee_id.split(" ");
+                const params = 
                 db.then(conn => conn.query(sql, params))
                     .then(([rows, fields]) => data.employee_id = rows[0].id)
                     .then(() => {
