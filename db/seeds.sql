@@ -1,3 +1,4 @@
+
 INSERT INTO departments (name)
 VALUES
     ('Legal'),
