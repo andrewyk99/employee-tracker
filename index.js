@@ -585,6 +585,7 @@ function deleteDepartment() {
         });
 }
 
+// Function to delete a role
 function deleteRole() {
     let roleList = [];
     const sql = `SELECT * FROM roles`;
@@ -609,6 +610,7 @@ function deleteRole() {
         });
 }
 
+// Function to delete an employee
 function deleteEmployee() {
     let employeeList = [];
     const sql = `SELECT first_name, last_name FROM employees`;
@@ -624,7 +626,7 @@ function deleteEmployee() {
                 }
             ]).then(data => {
                 const sql = `SELECT id FROM employees WHERE first_name = ? AND last_name = ?`;
-                const params = data.employee_id.split(" ");
+                const params = data.employee_id.split(" "); // Needs to split the first and last name
                 db.then(conn => conn.query(sql, params))
                     .then(([rows, fields]) => employee_id = rows[0].id)
                     .then(() => {
@@ -640,6 +642,7 @@ function deleteEmployee() {
         });
 }
 
+// Ends whichever other function, and asks if the user would like to go back to the main menu
 function closeApp() {
     inquirer.prompt([
         {
@@ -649,13 +652,14 @@ function closeApp() {
         }
     ]).then(data => {
         if (data.goBack) {
-            mainPrompt();
+            mainPrompt(); // If user wants to go back to the main menu, it will simply run the first function
         }
         else {
-            console.log('Goodbye!');
+            console.log('Goodbye!'); // If user does not wish to go back to the main menu, it will end the connection altogether
             db.then(conn => conn.end());
         }
     });
 }
 
+// Calls the first function that runs the main menu
 mainPrompt();
