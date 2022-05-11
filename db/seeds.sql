@@ -8,10 +8,13 @@ VALUES
 
 INSERT INTO roles (title, salary, department_id)
 VALUES
-    ('Title1', 0.00, 1),
-    ('Title2', 1.99, 3),
-    ('Title3', 2.99, 3),
-    ('Title4', 3.99, 4);
+    ('Attorney', 95000.00, 1),
+    ('Lawyer', 120000.00, 1),
+    ('Sales Rep', 60000.00, 2),
+    ('Finance Advisor', 80000.00, 3),
+    ('Accounting Manager', 100000.00, 3),
+    ('Electrical Engineer', 90000.00, 4),
+    ('Mech Engineer', 75000.00, 4);
 
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES

@@ -428,8 +428,8 @@ function updateMenu() {
 function updateEmployeeRole() {
     let roleList = [];
     let employeeList = [];
-    const sql = `SELECT * FROM roles`;
-    const sql2 = `SELECT first_name, last_name FROM employees`;
+    const sql = `SELECT * FROM roles`; // Shows the list of all the roles
+    const sql2 = `SELECT first_name, last_name FROM employees`;  // Shows the list of employees with their first and last name
     db.then(conn => conn.query(sql))
         .then(([rows, fields]) => roleList = rows.map(({ title }) => title));
     db.then(conn => conn.query(sql2))
@@ -473,6 +473,7 @@ function updateEmployeeRole() {
         });
 }
 
+// Update's which manager an employee has
 function updateEmployeeManager() {
     let employeeList = [];
     let employeeIdList = [];
@@ -483,7 +484,7 @@ function updateEmployeeManager() {
             employeeIdList = rows.map(({ id }) => id);
         }).then(() => {
             const managerList = [...employeeList];
-            managerList.push('None');
+            managerList.push('None'); // Creates a 'None' option in the managerList so that the user does not have to pick another employee to be their manager
             inquirer.prompt([
                 {
                     type: 'list',
@@ -494,16 +495,16 @@ function updateEmployeeManager() {
                 {
                     type: 'list',
                     name: 'manager_id',
-                    message: "What is the employee's new manager's ID?(Can select none!)",
+                    message: "What is the employee's new manager's ID?(Can select none!)", // By selecting 'None', it makes that employee a manager
                     choices: managerList
                 }
             ]).then(data => {
-                if (data.manager_id === 'None') {
+                if (data.manager_id === 'None') { // If statement that runs if user selects the pushed 'None' option
                     const sql = `UPDATE employees SET manager_id = NULL WHERE id = ?`;
                     const params = employeeIdList[employeeList.indexOf(data.employee_id)];
                     db.then(conn => conn.query(sql, params))
                         .then(() => {
-                            console.log(`Successfully updated ${data.employee_id}'s manager!`);
+                            console.log(`Successfully updated ${data.employee_id} as a manager!`);
                             closeApp();
                         });
                     }
@@ -523,6 +524,7 @@ function updateEmployeeManager() {
         });
 }
 
+// Function to display the available options under the main 'Delete...' choice
 function deleteMenu() {
     inquirer.prompt([
         {
@@ -558,6 +560,7 @@ function deleteMenu() {
     })
 }
 
+// Function to delete an entire department
 function deleteDepartment() {
     let departmentList = [];
     const sql = `SELECT * FROM departments`;
@@ -620,17 +623,16 @@ function deleteEmployee() {
                     choices: employeeList
                 }
             ]).then(data => {
-                let { employee_id } = data.split(" ");
                 const sql = `SELECT id FROM employees WHERE first_name = ? AND last_name = ?`;
-                const params = 
+                const params = data.employee_id.split(" ");
                 db.then(conn => conn.query(sql, params))
-                    .then(([rows, fields]) => data.employee_id = rows[0].id)
+                    .then(([rows, fields]) => employee_id = rows[0].id)
                     .then(() => {
                         const sql = `DELETE FROM employees WHERE id = ?`;
-                        const params = data.employee_id;
+                        const params = employee_id;
                         db.then(conn => conn.query(sql, params))
                             .then(() => {
-                                console.log(`Successfully deleted ${employee_id}!`);
+                                console.log(`Successfully deleted ${data.employee_id}!`);
                                 closeApp();
                             });
                     });
