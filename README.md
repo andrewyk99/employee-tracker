@@ -22,6 +22,8 @@ Screenshot of sub menu.
 ![screenshot of end of function](./assets/images/close-app.png?raw=true "Close app function")
 Screenshot of end of function.
 
+Video Demo: https://drive.google.com/file/d/15h4vbcVbLFysHAXJ60TglxhC4fLeqo82/view?usp=sharing
+
 ## Test
 There are no tests for this application.
 
